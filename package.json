@@ -1,5 +1,5 @@
 {
- "name": "vue-rest-node",
+ "name": "vue-music-rest-api",
  "version": "1.0.0",
  "dependencies": {
   "body-parser": "^1.5.1",
