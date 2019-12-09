@@ -45,6 +45,20 @@ router.post('/playlist/add', async(req, res) => {
     res.send({ status: 'PLAYLIST_CREATED_SUCCESS', playlists: getPlaylists });
 });
 
+router.post('/playlist/edit/:id', async(req, res) => {
+
+    console.log('NEW TITLE: ', req.body.data.title);
+    const playlist = Playlist.find({ _id: req.params.id })
+    await playlist.updateOne({ _id: req.params.id }, {
+        $set: {
+            title: req.body.data.title
+        }
+    })
+    const getPlaylists = await Playlist.find(); // replace with filter user_id
+    console.log("[REST API] La playlist ha sido actualizada con éxito.");
+    res.send({ status: 'PLAYLIST_UPDATED_SUCCESS', playlists: getPlaylists });
+});
+
 router.get('/getPlaylists', async(req, res) => {
     const playlists = await Playlist.find();
     res.send(playlists);
