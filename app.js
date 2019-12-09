@@ -40,8 +40,9 @@ router.post('/playlist/add', async(req, res) => {
 
     const playlist = new Playlist(req.body.data);
     await playlist.save()
+    const getPlaylists = await Playlist.find(); // replace with filter user_id
     console.log("[REST API] Se añadido una nueva playlist.");
-    res.send({ status: 'PLAYLIST_CREATED_SUCCESS' });
+    res.send({ status: 'PLAYLIST_CREATED_SUCCESS', playlists: getPlaylists });
 });
 
 router.get('/getPlaylists', async(req, res) => {
@@ -56,8 +57,9 @@ router.post('/playlist/delete/:id', async(req, res) => {
         const playlist = await Playlist.find({ _id: id });
 
         await Playlist.remove({ _id: id })
+        const getPlaylists = await Playlist.find(); // replace with filter user_id
         console.log(`[REST API] Se eliminado la playlist: ${id}.`);
-        res.send({ status: 'PLAYLIST_DELETED_SUCCESS' });
+        res.send({ status: 'PLAYLIST_DELETED_SUCCESS', playlists: getPlaylists });
     } catch (error) {
         console.log(error)
         console.log('[REST API] Playlist NO encontrada');
