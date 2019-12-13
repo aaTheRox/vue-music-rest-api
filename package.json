@@ -1,6 +1,7 @@
 {
  "name": "vue-music-rest-api",
  "version": "1.0.0",
+ "main": "app.js",
  "dependencies": {
   "body-parser": "^1.5.1",
   "express": "^4.7.1",
