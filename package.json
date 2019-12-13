@@ -1,12 +1,15 @@
 {
- "name": "vue-music-rest-api",
- "version": "1.0.0",
- "main": "app.js",
- "dependencies": {
-  "body-parser": "^1.5.1",
-  "express": "^4.7.1",
-  "express-session": "^1.17.0",
-  "method-override": "^2.1.2",
-  "mongoose": "^5.7.11"
- }
+    "name": "vue-music-rest-api",
+    "version": "1.0.0",
+    "main": "app.js",
+    "dependencies": {
+        "body-parser": "^1.5.1",
+        "express": "^4.7.1",
+        "express-session": "^1.17.0",
+        "method-override": "^2.1.2",
+        "mongoose": "^5.7.11"
+    },
+    "engines": {
+        "node": "0.12.7"
+    }
 }
