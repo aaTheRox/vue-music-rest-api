@@ -8,7 +8,8 @@ const PlaylistSchema = new Schema({
     archived: {
         type: Boolean,
         default: false
-    }
+    },
+    songs: Array
 })
 
 module.exports = mongoose.model('playlists', PlaylistSchema);

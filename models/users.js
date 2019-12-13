@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
     email: String,
     password: String,
+    token: String,
     active: {
         type: Boolean,
         default: true
