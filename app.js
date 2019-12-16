@@ -1,4 +1,4 @@
-var PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000
 const fs = require('fs');
 var express = require("express"),
     session = require('express-session')
@@ -31,7 +31,7 @@ app.use(function(req, res, next) {
 var router = express.Router();
 app.use(router);
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
     console.log("Node server running on http://localhost:3000");
 });
 
@@ -86,6 +86,34 @@ router.get('/getPlaylists', async(req, res) => {
     const playlists = await Playlist.find();
     res.send(playlists);
     console.log("[REST API] Playlists cargadas con éxito.");
+});
+
+router.get('/getPlaylist/:id', async(req, res) => {
+    const playlistId = {_id: req.params.id};
+    const playlist = await Playlist.find(playlistId);
+    res.send(playlist);
+    console.log("[REST API] Playlist cargada con éxito.");
+});
+
+router.post('/playlist/delete/song', async(req, res) => {
+    console.log(req.body)
+    const playlistId = req.body.data.playlistId;
+    console.log('playlist:: ', playlistId)
+    try {
+        const playlist = await Playlist.findByIdAndUpdate(playlistId, {
+            $pull: {
+                songs: req.body.data.songId
+            }
+        });
+           
+        console.log(`[REST API] Se eliminado la playlist: ${playlistId}.`);
+        res.send({ status: 'PLAYLIST_SONG_DELETED_SUCCESS' });
+    } catch (error) {
+        console.log(error)
+        console.log('[REST API] Playlist NO encontrada');
+        res.send({ status: 'PLAYLIST_NOT_FOUND' });
+    }
+
 });
 
 router.post('/playlist/delete/:id', async(req, res) => {
@@ -200,6 +228,7 @@ router.post('/user/update-settings', async(req, res) => {
     };
     const user = await Users.find(filter);
     console.log(user)
+    console.log(req.body)
     if (user.length > 0) {
         res.send({ status: 'UPDATE_SETTINGS_SUCCESS' });
         console.log("[REST API] El perfil se ha actualizado correctamente.");
@@ -209,6 +238,7 @@ router.post('/user/update-settings', async(req, res) => {
                 password: req.body.data.new_password
             }
         });
+        
     } else {
         res.send({ status: 'UPDATE_SETTINGS_FAILED' });
         console.log("[REST API] No se ha podido actualizar el perfil.");
