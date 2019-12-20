@@ -1,4 +1,5 @@
 const PORT = process.env.PORT || 3000
+
 const fs = require('fs');
 var express = require("express"),
     session = require('express-session')
@@ -33,17 +34,17 @@ app.use(router);
 
 app.listen(PORT, () => {
     console.log("Node server running on http://localhost:3000");
-/*var salt = bcrypt.genSaltSync(10);
-var hash = bcrypt.hashSync("raider/\/", salt);
-    console.log(hash)
-    console.log(rypt.compareSync("B4c0/\/", hash))*/
+    /*var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync("raider/\/", salt);
+        console.log(hash)
+        console.log(rypt.compareSync("B4c0/\/", hash))*/
 });
 router.get('/', async(req, res) => {
-    const playlist = new Playlist({title: 'Ok'});
-    await playlist.save()
+        const playlist = new Playlist({ title: 'Ok' });
+        await playlist.save()
 
-})
-// PLAYLIST
+    })
+    // PLAYLIST
 router.post('/playlist/add', async(req, res) => {
     try {
         const playlist = new Playlist(req.body.data);
@@ -96,9 +97,8 @@ router.get('/test', async(req, res) => {
 router.post('/getPlaylists', async(req, res) => {
     console.log("[REST API] Buscando playlists...");
     const pagination = req.body.pagination;
-    
-    try
-    {
+
+    try {
         let playlists, total;
 
         const ITEMS_PER_PAGE = pagination.perPage;
@@ -106,37 +106,36 @@ router.post('/getPlaylists', async(req, res) => {
         const NUMBER_OF_ITEMS = pagination.NUMBER_OF_ITEMS;
 
         total = await Playlist.countDocuments();
-        playlists = await Playlist.find().skip(ITEMS_PER_PAGE * (PAGE_NUMBER - 1)).limit(ITEMS_PER_PAGE )
-        res.send({playlists: playlists, total: total});
+        playlists = await Playlist.find().skip(ITEMS_PER_PAGE * (PAGE_NUMBER - 1)).limit(ITEMS_PER_PAGE)
+        res.send({ playlists: playlists, total: total });
 
         console.log("[REST API] Playlists cargadas con éxito.");
-    } catch(error) {
+    } catch (error) {
         console.log("[REST API] Ha ocurrido un error al intentar obtener las playlists.", error);
     }
-   
+
 });
 
 router.post('/getAllPlaylists', async(req, res) => {
-    try
-    {
+    try {
         const playlists = await Playlist.find();
         const total = await Playlist.countDocuments();
-           
-        res.send({playlists: playlists, total: total});
+
+        res.send({ playlists: playlists, total: total });
         console.log("[REST API] Playlists cargadas con éxito.");
-    } catch(error) {
+    } catch (error) {
         console.log("[REST API] Ha ocurrido un error al intentar obtener las playlists.", error);
     }
 });
 
 router.get('/getPlaylist/:id', async(req, res) => {
     try {
-        const playlistId = {_id: req.params.id};
+        const playlistId = { _id: req.params.id };
         const playlist = await Playlist.find(playlistId);
         res.send(playlist);
         console.log("[REST API] Playlist cargada con éxito.");
     } catch (error) {
-        res.send({status: "PLAYLIST_NOT_FOUND"});
+        res.send({ status: "PLAYLIST_NOT_FOUND" });
         console.log("[REST API] No se pudo cargar la playlist.");
     }
 });
@@ -149,7 +148,7 @@ router.post('/playlist/delete/song', async(req, res) => {
                 songs: req.body.data.songId
             }
         });
-           
+
         console.log(`[REST API] Se eliminado la playlist: ${playlistId}.`);
         res.send({ status: 'PLAYLIST_SONG_DELETED_SUCCESS' });
     } catch (error) {
@@ -157,6 +156,34 @@ router.post('/playlist/delete/song', async(req, res) => {
         console.log(error)
         res.send({ status: 'PLAYLIST_NOT_FOUND' });
     }
+});
+
+router.get('/getPlaylist/:id', async(req, res) => {
+    const playlistId = { _id: req.params.id };
+    const playlist = await Playlist.find(playlistId);
+    res.send(playlist);
+    console.log("[REST API] Playlist cargada con éxito.");
+});
+
+router.post('/playlist/delete/song', async(req, res) => {
+    console.log(req.body)
+    const playlistId = req.body.data.playlistId;
+    console.log('playlist:: ', playlistId)
+    try {
+        const playlist = await Playlist.findByIdAndUpdate(playlistId, {
+            $pull: {
+                songs: req.body.data.songId
+            }
+        });
+
+        console.log(`[REST API] Se eliminado la playlist: ${playlistId}.`);
+        res.send({ status: 'PLAYLIST_SONG_DELETED_SUCCESS' });
+    } catch (error) {
+        console.log(error)
+        console.log('[REST API] Playlist NO encontrada');
+        res.send({ status: 'PLAYLIST_NOT_FOUND' });
+    }
+
 });
 
 router.post('/playlist/delete/:id', async(req, res) => {
@@ -283,7 +310,7 @@ router.post('/user/update-settings', async(req, res) => {
                 password: req.body.data.new_password
             }
         });
-        
+
     } else {
         res.send({ status: 'UPDATE_SETTINGS_FAILED' });
         console.log("[REST API] No se ha podido actualizar el perfil.");
