@@ -191,7 +191,7 @@ router.post('/playlist/delete/:id', async(req, res) => {
         const { id } = req.params;
         const playlist = await Playlist.find({ _id: id });
 
-        await Playlist.remove({ _id: id })
+        await Playlist.deleteOne({ _id: id })
         console.log(`[REST API] Se eliminado la playlist: ${id}.`);
         res.send({ status: 'PLAYLIST_DELETED_SUCCESS' });
     } catch (error) {
